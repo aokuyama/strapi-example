@@ -1,0 +1,14 @@
+version: "3"
+services:
+  app:
+    container_name: strapi
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./app:/app
+    working_dir: /app
+    ports:
+      - 1337:1337
+    tty: true
+    entrypoint: yarn develop
