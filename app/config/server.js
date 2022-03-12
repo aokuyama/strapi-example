@@ -1,7 +1,22 @@
-module.exports = ({ env }) => ({
-  host: env('HOST', '0.0.0.0'),
-  port: env.int('PORT', 1337),
-  app: {
-    keys: env.array('APP_KEYS'),
-  },
-});
+module.exports = ({ env }) => {
+  let url = "<Insert Lambda endpoint url here after deploy.>";
+
+  // Check if running in serverless-offline
+  if (env("IS_OFFLINE", null) === "true") {
+    url = "http://localhost:3000/dev";
+  }
+
+  return {
+    host: env("HOST", "0.0.0.0"),
+    port: env.int("PORT", 1337),
+    url,
+    admin: {
+      serveAdminPanel: false, // No admin panel
+      autoOpen: false,
+      url: "/",
+      auth: {
+        secret: env("ADMIN_JWT_SECRET", "Insert random string as env variable in production"),
+      },
+    },
+  };
+};
